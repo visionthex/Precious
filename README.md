@@ -1,6 +1,4 @@
 ![Image1](https://github.com/visionthex/Precious/blob/main/Images/image1.png)
-[HACKTHEBOX](https://hackthebox.com)
-
 [![Hackthebox](https://img.shields.io/badge/HackTheBox-111927?style=for-the-badge&logo=Hack%20The%20Box&logoColor=9FEF00)](https://hackthebox.com)
 
 
